@@ -1,10 +1,13 @@
 from PySide6 import QtCore, QtWidgets, QtGui
 from calibration import FACES
+from i18n import translate_text, translate_widget_tree
 
 class CalibrationDialog(QtWidgets.QDialog):
     def __init__(self,model,parent=None):
         super().__init__(parent);self.model=model;self._last_mask=None;self._last_check=None
-        self.setWindowTitle('六位置校准 · MCU 参数保存');self.resize(1150,820)
+        self._title_zh='六位置校准 · MCU 参数保存'
+        self._headers_zh=['朝上方向','原始 X (mg)','原始 Y (mg)','原始 Z (mg)','校正残差 X / Y / Z (mg)','结果']
+        self.setWindowTitle(self._title_zh);self.resize(1150,820)
         layout=QtWidgets.QVBoxLayout(self)
         intro=QtWidgets.QLabel('停机后操作：依次让 X+、X−、Y+、Y−、Z+、Z− 朝上。每面放稳后采集 5 秒，收到完成结果再换面。\n校准由 MCU 计算和应用；本软件不会对收到的数据重复校正。')
         intro.setWordWrap(True);layout.addWidget(intro)
@@ -23,7 +26,7 @@ class CalibrationDialog(QtWidgets.QDialog):
         self.query=QtWidgets.QPushButton('查询设备状态');self.query.clicked.connect(self.query_all);top.addWidget(self.query)
         self.cancel=QtWidgets.QPushButton('取消本次校准');self.cancel.clicked.connect(lambda:self.request('cancel'));top.addWidget(self.cancel)
         self.version_label=QtWidgets.QLabel();self.version_label.setWordWrap(True);layout.addWidget(self.version_label)
-        self.table=QtWidgets.QTableWidget(6,6);self.table.setHorizontalHeaderLabels(['朝上方向','原始 X (mg)','原始 Y (mg)','原始 Z (mg)','校正残差 X / Y / Z (mg)','结果'])
+        self.table=QtWidgets.QTableWidget(6,6);self.table.setHorizontalHeaderLabels(self._headers_zh)
         self.table.verticalHeader().hide();self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -55,6 +58,11 @@ class CalibrationDialog(QtWidgets.QDialog):
         foot=QtWidgets.QLabel('保存后需在正常运行工况下重新学习。六面校准不替代高频振动幅值/频响校验。')
         foot.setWordWrap(True);layout.addWidget(foot)
         self.refresh()
+    def apply_language(self, language='zh'):
+        translate_widget_tree(self, language)
+        self.setWindowTitle(translate_text(self._title_zh, language))
+        self.table.setHorizontalHeaderLabels([translate_text(value, language) for value in self._headers_zh])
+
     def query_all(self):
         self.model.query_info();self.model.query();self.model.query_data()
     def request(self,kind):

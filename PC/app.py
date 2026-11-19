@@ -16,6 +16,7 @@ from telemetry import parse_telemetry, parse_rate
 from calibration import Calibration, parse_calibration
 from calibration_ui import CalibrationDialog
 from learning_control import CommandPacer, LearningTransaction, parse_learning
+from i18n import translate_text, translate_widget_tree
 
 class Receiver(threading.Thread):
     def __init__(self, port, baud):
@@ -178,7 +179,11 @@ class Window(QtWidgets.QMainWindow):
             if family in families:
                 QtWidgets.QApplication.instance().setFont(QtGui.QFont(family,9))
                 break
-        self.setWindowTitle('三轴振动监测 · H743 USB FS · 40/80K试验版')
+        self._title_zh = '三轴振动监测 · H743 USB FS · 40/80K试验版'
+        self.setWindowTitle(self._title_zh)
+        self.settings = QtCore.QSettings('CoreMaker', 'H743VibrationMonitor')
+        self.language = str(self.settings.value('language', 'zh'))
+        if self.language not in ('zh', 'en'): self.language = 'zh'
         self.resize(1280, 900)
         self.worker = None
         self.data = SampleRing(131072)
@@ -204,6 +209,12 @@ class Window(QtWidgets.QMainWindow):
         layout = QtWidgets.QVBoxLayout(root);layout.setContentsMargins(8,6,8,6);layout.setSpacing(4)
         bar = QtWidgets.QHBoxLayout(); layout.addLayout(bar)
         self.ports = QtWidgets.QComboBox(); bar.addWidget(self.ports)
+        self.language_label = QtWidgets.QLabel('语言 / Language'); self.language_label.setProperty('_coremaker_i18n_skip', True); bar.addWidget(self.language_label)
+        self.language_combo = QtWidgets.QComboBox()
+        self.language_combo.addItem('中文', 'zh'); self.language_combo.addItem('English', 'en')
+        self.language_combo.setCurrentIndex(0 if self.language == 'zh' else 1)
+        self.language_combo.currentIndexChanged.connect(self.change_language)
+        bar.addWidget(self.language_combo)
         refresh = QtWidgets.QPushButton('刷新串口'); refresh.clicked.connect(self.refresh); bar.addWidget(refresh)
         self.baud = QtWidgets.QComboBox(); self.baud.addItems(['115200','921600','2000000','3000000','4000000','6000000']);self.baud.setCurrentText('115200');self.baud.setToolTip('原生USB CDC不受此波特率限制；当前默认115200。');bar.addWidget(self.baud)
         self.connect_button = QtWidgets.QPushButton('连接'); self.connect_button.clicked.connect(self.connect_port); bar.addWidget(self.connect_button)
@@ -297,15 +308,66 @@ class Window(QtWidgets.QMainWindow):
         layout.addWidget(self.perf_label)
         self.status = QtWidgets.QLabel('未连接'); layout.addWidget(self.status)
         self.log = QtWidgets.QPlainTextEdit(); self.log.setReadOnly(True); self.log.setMaximumBlockCount(150); self.log.setMinimumHeight(38);self.log.setMaximumHeight(55); layout.addWidget(self.log)
-        self.timer = QtCore.QTimer(self); self.timer.timeout.connect(self.update_data); self.timer.start(33)
+        self._log_source_lines = deque(maxlen=150)
+        self.timer = QtCore.QTimer(self); self.timer.timeout.connect(self._ui_tick); self.timer.start(33)
         self.follow.toggled.connect(self.apply_view_mode)
         self.auto_y.toggled.connect(self.apply_view_mode)
         self.seconds.currentTextChanged.connect(self.apply_view_mode)
         self.apply_view_mode()
         self.refresh()
+        self.apply_language()
+    def change_language(self, index=None):
+        if hasattr(self, 'language_combo'):
+            self.language = self.language_combo.currentData() or 'zh'
+            self.settings.setValue('language', self.language)
+        self.apply_language()
+
+    def apply_language(self):
+        """Apply the selected language to the complete PC interface."""
+        lang = getattr(self, 'language', 'zh')
+        translate_widget_tree(self, lang)
+        self.setWindowTitle(translate_text(self._title_zh, lang))
+        if hasattr(self, 'wave'):
+            self.wave.setTitle(translate_text('三轴加速度波形', lang))
+            self.wave.setLabel('left', translate_text('加速度', lang), units='mg')
+            self.wave.setLabel('bottom', translate_text('相对时间', lang), units='s')
+            if not getattr(self, '_fft_title_zh', None):
+                self.fft.setTitle(translate_text('频谱（Hann 窗，去直流）', lang))
+            self.score_plot.setTitle(translate_text('MCU 异常分数（偏差指标，非故障概率；虚线为判断阈值）', lang))
+            self.fft.setLabel('left', translate_text('幅值', lang), units='mg')
+            self.fft.setLabel('bottom', translate_text('频率', lang), units='Hz')
+            self.score_plot.setLabel('left', translate_text('异常分数', lang))
+            self.score_plot.setLabel('bottom', translate_text('相对时间', lang), units='s')
+            if getattr(self, '_fft_title_zh', None):
+                self.fft.setTitle(translate_text(self._fft_title_zh, lang))
+        if hasattr(self, 'cal_dialog'):
+            self.cal_dialog.apply_language(lang)
+        if hasattr(self, '_log_source_lines'):
+            self.render_log()
+
+    def render_log(self):
+        lines = [translate_text(line, self.language) for line in self._log_source_lines]
+        rendered = '\n'.join(lines)
+        if self.log.toPlainText() == rendered:
+            return
+        cursor = self.log.textCursor()
+        at_end = cursor.atEnd()
+        self.log.setPlainText(rendered)
+        if at_end:
+            cursor = self.log.textCursor()
+            cursor.movePosition(QtGui.QTextCursor.MoveOperation.End)
+            self.log.setTextCursor(cursor)
+
+    def _ui_tick(self):
+        self.update_data()
+        # Some labels are updated by the serial/data callbacks. Translate after
+        # each UI refresh so live status, telemetry and calibration notes follow
+        # the selected language as well as the static controls.
+        self.apply_language()
+
     def open_calibration(self):
         if self.record_path or self.rate_pending or self.pending_command or (self.last_detection and self.last_detection.state==1):
-            QtWidgets.QMessageBox.information(self,'六位置校准','请先结束 CSV 保存、采样率切换或正常状态学习。');return
+            QtWidgets.QMessageBox.information(self,translate_text('六位置校准',self.language),translate_text('请先结束 CSV 保存、采样率切换或正常状态学习。',self.language));return
         self.calibration.query();self.cal_dialog.refresh();self.cal_dialog.show();self.cal_dialog.raise_()
     def update_calibration(self,w):
         if getattr(w,'is_h7',False):
@@ -393,9 +455,9 @@ class Window(QtWidgets.QMainWindow):
             if self.worker.is_alive(): self.log.appendPlainText('等待串口线程退出'); return
             self.worker = None; self.reset_detection(); self.record_path = None; self.record.setText('保存 CSV'); self.connect_button.setText('连接');self.baud.setEnabled(True); return
         if not self.ports.currentData():
-            QtWidgets.QMessageBox.information(self,'串口','请先选择串口。'); return
+            QtWidgets.QMessageBox.information(self,translate_text('串口',self.language),translate_text('请先选择串口。',self.language)); return
         if any(x in self.ports.currentText() for x in ('CH343','STLink')):
-            QtWidgets.QMessageBox.warning(self,'原生USB CDC','请选择MCU原生USB对应的USB串行设备，不是CH343或STLink。');return
+            QtWidgets.QMessageBox.warning(self,translate_text('原生USB CDC',self.language),translate_text('请选择MCU原生USB对应的USB串行设备，不是CH343或STLink。',self.language));return
         self.data.clear(); self.previous = None; self.gaps = 0
         self.reset_detection()
         self.worker = Receiver(self.ports.currentData(),int(self.baud.currentText()))
@@ -594,7 +656,7 @@ class Window(QtWidgets.QMainWindow):
         if self.record_path:
             self.worker.commands.put(('record',None)); self.record_path = None; self.record.setText('保存 CSV')
         else:
-            path,_ = QtWidgets.QFileDialog.getSaveFileName(self,'保存完整原始采样','vibration.csv','CSV (*.csv)')
+            path,_ = QtWidgets.QFileDialog.getSaveFileName(self,translate_text('保存完整原始采样',self.language),'vibration.csv',translate_text('CSV (*.csv)',self.language))
             if path:
                 self.record_path = path; self.worker.commands.put(('record',path)); self.record.setText('结束保存')
     def update_data(self):
@@ -604,7 +666,9 @@ class Window(QtWidgets.QMainWindow):
         for _ in range(64):
             try: log_batch.append(w.logs.get_nowait())
             except queue.Empty: break
-        if log_batch: self.log.appendPlainText("\n".join(log_batch))
+        if log_batch:
+            self._log_source_lines.extend(log_batch)
+            self.render_log()
         self.update_rate(w)
         self.update_mcu_telemetry(w)
         self.update_detection(w)
@@ -642,7 +706,8 @@ class Window(QtWidgets.QMainWindow):
         self.last_fft = time.monotonic()
         n = int(self.nfft.currentText())
         if len(all_data)<n:
-            self.fft.setTitle(f'FFT 等待连续数据 {len(all_data)}/{n}')
+            self._fft_title_zh = f'FFT 等待连续数据 {len(all_data)}/{n}'
+            self.fft.setTitle(translate_text(self._fft_title_zh, self.language))
             for c in self.spectra: c.clear()
             return
         f,amp = spectrum(all_data[-n:],self.fs)
@@ -650,7 +715,8 @@ class Window(QtWidgets.QMainWindow):
         for a,c in enumerate(self.spectra):
             c.setVisible(self.axes[a].isChecked()); c.setData(f,amp[:,a])
             peak = 1+int(np.argmax(amp[1:,a])); peaks.append(f'{"XYZ"[a]} {f[peak]:.2f} Hz')
-        self.fft.setTitle(f'PC 主峰: {" / ".join(peaks)} · Δf={self.fs/n:.3f} Hz')
+        self._fft_title_zh = f'PC 主峰: {" / ".join(peaks)} · Δf={self.fs/n:.3f} Hz'
+        self.fft.setTitle(translate_text(self._fft_title_zh, self.language))
     def closeEvent(self,event):
         if self.calibration.locked:
             self.calibration.note='退出前请先取消校准；保存过程中请等待最终确认。'
