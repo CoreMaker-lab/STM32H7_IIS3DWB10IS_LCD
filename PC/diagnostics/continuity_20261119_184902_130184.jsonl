@@ -1,0 +1,61 @@
+{"event": "open", "port": "COM14", "baud": 115200, "elapsed_s": 0.001661}
+{"event": "driver_buffer", "rx_requested": 8388608, "result": "accepted", "elapsed_s": 0.001917}
+{"event": "transport", "mode": "dedicated_process", "elapsed_s": 0.001986}
+{"event": "command", "command": "STOP", "elapsed_s": 0.002088}
+{"event": "summary", "frames": 0, "samples": 0, "events": 0, "counts": {"seq": 0, "index": 0, "flags": 0, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 0.015616}
+{"event": "mcu_text", "text": "OK STOP", "elapsed_s": 0.015873}
+{"event": "command", "command": "STATUS", "elapsed_s": 0.108194}
+{"event": "command", "command": "RATE?", "elapsed_s": 0.216024}
+{"event": "mcu_text", "text": "RATE current=2500 supported=2500,5000,10000,20000,40000,80000", "elapsed_s": 0.232146}
+{"event": "command", "command": "CAL STATUS", "elapsed_s": 0.321347}
+{"event": "command", "command": "CAL INFO", "elapsed_s": 0.431102}
+{"event": "command", "command": "CAL MONITOR 1", "elapsed_s": 0.539819}
+{"event": "mcu_text", "text": "OK CAL MONITOR 1", "elapsed_s": 0.555932}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=31 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 0.708054}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=5615,4883,5615 amp_mg_x100=49,47,109 windows=19 skip=0 age_ms=79 step_max_ms=1", "elapsed_s": 0.708154}
+{"event": "mcu_text", "text": "DETECT state=3 progress=100 score_x100=163 model=1 blocks=0 NVM=0", "elapsed_s": 0.708229}
+{"event": "summary", "frames": 0, "samples": 0, "events": 0, "counts": {"seq": 0, "index": 0, "flags": 0, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 1.044574}
+{"event": "mcu_text", "text": "FIFO samples/s=2494 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 1.708879}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=6104,6104,6104 amp_mg_x100=73,81,351 windows=24 skip=0 age_ms=52 step_max_ms=1", "elapsed_s": 1.708987}
+{"event": "mcu_text", "text": "DETECT state=3 progress=100 score_x100=79 model=1 blocks=0 NVM=0", "elapsed_s": 1.709067}
+{"event": "summary", "frames": 0, "samples": 0, "events": 0, "counts": {"seq": 0, "index": 0, "flags": 0, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 2.060839}
+{"event": "command", "command": "START", "elapsed_s": 2.239651}
+{"event": "mcu_text", "text": "OK START", "elapsed_s": 2.256259}
+{"event": "gap", "reasons": ["flags"], "previous": null, "current": {"seq": 0, "fs": 2500, "first": 14303, "flags": 1, "count": 32}, "seq_delta": null, "index_delta": null, "elapsed_s": 2.269243}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 2.708261}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=5615,4883,6348 amp_mg_x100=124,126,523 windows=29 skip=0 age_ms=19 step_max_ms=1", "elapsed_s": 2.708384}
+{"event": "mcu_text", "text": "DETECT state=3 progress=100 score_x100=149 model=1 blocks=0 NVM=0", "elapsed_s": 2.708463}
+{"event": "summary", "frames": 62, "samples": 1984, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 3.065185}
+{"event": "mcu_text", "text": "FIFO samples/s=2492 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 3.70964}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=5859,5859,5615 amp_mg_x100=72,70,185 windows=33 skip=0 age_ms=198 step_max_ms=1", "elapsed_s": 3.709825}
+{"event": "mcu_text", "text": "DETECT state=4 progress=100 score_x100=561 model=1 blocks=0 NVM=0", "elapsed_s": 3.710151}
+{"event": "summary", "frames": 140, "samples": 4480, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 4.06674}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=31 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 4.708931}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=1221,5615,5127 amp_mg_x100=321,304,2153 windows=38 skip=0 age_ms=175 step_max_ms=1", "elapsed_s": 4.709071}
+{"event": "mcu_text", "text": "DETECT state=4 progress=100 score_x100=1092 model=1 blocks=0 NVM=0", "elapsed_s": 4.709142}
+{"event": "summary", "frames": 218, "samples": 6976, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 5.068893}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 5.708824}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=732,488,977 amp_mg_x100=112,115,617 windows=43 skip=0 age_ms=145 step_max_ms=1", "elapsed_s": 5.708949}
+{"event": "mcu_text", "text": "DETECT state=5 progress=100 score_x100=159 model=1 blocks=0 NVM=0", "elapsed_s": 5.709031}
+{"event": "summary", "frames": 296, "samples": 9472, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 6.073001}
+{"event": "mcu_text", "text": "FIFO samples/s=2492 level=0 ovr=0 errors=0 UI_fps=31 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 6.709057}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=6104,5859,5371 amp_mg_x100=150,94,403 windows=48 skip=0 age_ms=119 step_max_ms=1", "elapsed_s": 6.709174}
+{"event": "mcu_text", "text": "DETECT state=3 progress=100 score_x100=99 model=1 blocks=0 NVM=0", "elapsed_s": 6.709247}
+{"event": "summary", "frames": 374, "samples": 11968, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 7.073274}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 7.709253}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=244,244,7813 amp_mg_x100=577,146,135 windows=53 skip=0 age_ms=91 step_max_ms=1", "elapsed_s": 7.709377}
+{"event": "mcu_text", "text": "DETECT state=4 progress=100 score_x100=63 model=1 blocks=0 NVM=0", "elapsed_s": 7.709471}
+{"event": "summary", "frames": 452, "samples": 14464, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 8.077515}
+{"event": "mcu_text", "text": "FIFO samples/s=2488 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 8.709093}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=244,244,244 amp_mg_x100=2172,243,713 windows=58 skip=0 age_ms=63 step_max_ms=1", "elapsed_s": 8.709189}
+{"event": "mcu_text", "text": "DETECT state=4 progress=100 score_x100=1035 model=1 blocks=0 NVM=0", "elapsed_s": 8.709378}
+{"event": "summary", "frames": 531, "samples": 16992, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 9.090312}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=30 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 9.709016}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=244,244,1221 amp_mg_x100=370,326,232 windows=63 skip=0 age_ms=36 step_max_ms=1", "elapsed_s": 9.709109}
+{"event": "mcu_text", "text": "DETECT state=5 progress=100 score_x100=339 model=1 blocks=0 NVM=0", "elapsed_s": 9.709193}
+{"event": "summary", "frames": 609, "samples": 19488, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 10.092535}
+{"event": "mcu_text", "text": "FIFO samples/s=2491 level=0 ovr=0 errors=0 UI_fps=31 init=0 LCD=0 tx_drop=0 stream_drop=0 rx_ovf=0 usb_xfr_dis=0 usb_xfr_txfe=0", "elapsed_s": 10.708865}
+{"event": "mcu_text", "text": "FFT valid=1 hz_x100=6104,6104,6104 amp_mg_x100=132,241,273 windows=68 skip=0 age_ms=8 step_max_ms=1", "elapsed_s": 10.708989}
+{"event": "mcu_text", "text": "DETECT state=3 progress=100 score_x100=59 model=1 blocks=0 NVM=0", "elapsed_s": 10.709112}
+{"event": "summary", "frames": 687, "samples": 21984, "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "crc_errors": 0, "display_drops": 0, "elapsed_s": 11.094164}
+{"event": "close", "events": 1, "counts": {"seq": 0, "index": 0, "flags": 1, "rate": 0}, "elapsed_s": 11.120238}
