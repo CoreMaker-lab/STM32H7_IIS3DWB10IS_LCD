@@ -4,7 +4,17 @@
 基于 **STM32H743ZIT6** 与 **ST IIS3DWB10IS** 的三轴振动采集与边缘分析项目。MCU 端完成传感器 FIFO 采集、实时特征计算、FFT 分析、正常状态学习和异常状态判断；配套 Windows PC 上位机通过原生 USB FS CDC 实现设备控制、波形/频谱显示、数据连续性监控及 CSV 导出。
 
 > 本仓库包含 STM32CubeIDE 固件工程和中英文双语 PC 上位机。当前固件支持最高 **80 kS/s** 采样率。
+<img width="2480" height="1275" alt="image" src="https://github.com/user-attachments/assets/4d22433f-499f-4898-93a2-d6e7e77746da" />
+<img width="1600" height="1164" alt="image" src="https://github.com/user-attachments/assets/7bea6ff4-7a6d-4fdf-a241-f83b356783be" />
 
+## 项目维护者与联系方式 \| Project Maintainer & Contact
+
+- **Name / 姓名**: Billy
+- **交流群 / Discussion Group**: 925643491
+- **Email / 邮箱**: <a845656974@outlook.com>
+- **Phone / 电话**: +86 15622736378
+
+------------------------------------------------------------------------
 ---
 
 ## 目录
